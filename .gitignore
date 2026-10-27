@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native builds
+ios/
+android/
+
+# Secrets / env, NEVER commit
+.env
+.env*.local
+.env.*
+
+# Signing keys
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Mac / editor
+.DS_Store
+.vscode/
+.idea/
+*.orig.*
