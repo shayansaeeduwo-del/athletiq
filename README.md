@@ -1,50 +1,83 @@
-# Welcome to your Expo app 👋
+# AthletiQ
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An AI planner for student-athletes. Tell it your program, your sport, and what matters most this term, and it builds a personalized weekly schedule that balances training, classes, and study.
 
-## Get started
+> Status: in development. Auth, onboarding, and AI schedule generation are working; a beta for student-athletes at Western University is next.
 
-1. Install dependencies
+<!-- Add 2–3 screenshots here: onboarding, goal weighting, home calendar -->
 
+## Features
+
+- **Sign-up and login** with email confirmation through a deep link (`athletiq://`), then routing that sends new users to onboarding and returning users to their dashboard
+- **Four-step onboarding**: welcome, academic profile, athletic profile, and goal weighting. Drafts save on-device so nothing is lost if the app closes.
+- **AI schedule generation**: onboarding data is sent to the Claude API, which returns a colour-coded weekly schedule as JSON
+- **Home calendar** with a 7-day strip and an hourly grid from 6 am to 11 pm
+- **Secure data**: every table is protected by Supabase row-level security, so users can only read and write their own rows
+
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| App | React Native, Expo, Expo Router, TypeScript |
+| Local storage | AsyncStorage (onboarding drafts) |
+| Backend | Supabase: PostgreSQL, Auth, row-level security |
+| AI | Anthropic Claude API |
+
+## Project structure
+
+```
+app/
+  (tabs)/          Home and tab screens
+  onboarding/      Four-step onboarding flow
+  login.tsx        Login screen
+  signup.tsx       Sign-up screen
+components/        Shared UI and onboarding components
+constants/         Theme and AthletiQ design tokens
+lib/
+  supabase.js      Supabase client
+  onboarding-data.ts  Draft saving and final upsert
+  post-auth-route.ts  Decides where users land after sign-in
+  auth-deeplink.ts    Handles the email confirmation link
+supabase/
+  migrations/      Database schema and policies
+```
+
+## Database
+
+| Table | Holds |
+|---|---|
+| `profiles` | User profile |
+| `athlete_onboarding` | Academic and athletic answers, goal weights |
+| `schedules` | Generated weekly schedules |
+| `performance_logs` | Training and performance entries |
+
+## Run it locally
+
+1. Clone the repo and install dependencies:
    ```bash
+   git clone https://github.com/shayansaeeduwo-del/athletiq.git
+   cd athletiq
    npm install
    ```
-
-2. Start the app
-
+2. Create a `.env` file in the project root:
+   ```
+   EXPO_PUBLIC_SUPABASE_URL=your-supabase-url
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+3. Run the SQL in `supabase/migrations/` in your Supabase project's SQL Editor.
+4. Start the app and scan the QR code with Expo Go:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Roadmap
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [ ] Move the Claude API call into a Supabase Edge Function so the API key stays on the server
+- [ ] Performance tracker screen
+- [ ] Settings and profile screen
+- [ ] Nearby opportunities: tournaments and events matched to each athlete
+- [ ] Beta release to student-athletes
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Author
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Built by [Shayan Saeed](https://shayansaeeduwo-del.github.io), computer science student at Western University.
